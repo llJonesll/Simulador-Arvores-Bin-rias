@@ -24,9 +24,12 @@ No menu, escolha a árvore (mouse, setas + Enter, ou teclas 1, 2, 3). No simulad
 | Início / fim | ◀◀ / ▶▶ | Home / End |
 | Auto ou passo a passo | Modo | M |
 | Voltar ao menu | Menu | Esc |
+| Abrir o tutorial | ? (canto inferior direito) | F1 ou H |
 
 Digite a chave (0 a 999) no campo; ↑ e ↓ ajustam o valor. Clique na linha do
 tempo do painel "Passo a passo" para saltar para qualquer passo.
+
+Veja também o [TUTORIAL.md](TUTORIAL.md), que repete o tutorial do programa.
 
 ## Templates
 
@@ -56,6 +59,8 @@ simulador/
     Visualizador.java       desenha a árvore e anima a transição entre passos
     Reprodutor.java         auto / manual, velocidade, avançar e voltar
     BarraControles.java  BarraTopo.java  PainelPassos.java  PopupTemplates.java
+    Ajuda.java              botão "?" e tutorial (vale para qualquer tela)
+    BotaoAjuda.java  Tutorial.java  PaginaTutorial.java  PaginasTutorial.java
     Botao.java  CampoNumero.java  Aviso.java  Particulas.java  Fundo.java
     Desenho.java  Tema.java  Tela.java
 ```

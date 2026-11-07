@@ -2,6 +2,7 @@ package simulador;
 
 import br.com.davidbuzatto.jsge.core.engine.EngineFrame;
 import simulador.modelo.TipoArvore;
+import simulador.ui.Ajuda;
 import simulador.ui.Botao;
 import simulador.ui.Tela;
 import simulador.ui.TelaMenu;
@@ -20,6 +21,7 @@ public class Main extends EngineFrame {
     
     private Tela tela;
     private Tela proxima;
+    private final Ajuda ajuda = new Ajuda();
     private double fade;
     private boolean maoAnterior;
     
@@ -38,7 +40,9 @@ public class Main extends EngineFrame {
     public void update( double delta ) {
         
         Botao.mao = false;
-        tela.atualizar( delta );
+        if ( !ajuda.atualizar( this, delta, getScreenWidth(), getScreenHeight() ) ) {
+            tela.atualizar( delta );
+        }
         
         boolean mao = Botao.mao;
         if ( mao != maoAnterior ) {
@@ -66,6 +70,7 @@ public class Main extends EngineFrame {
     @Override
     public void draw() {
         tela.desenhar();
+        ajuda.desenhar( this, getScreenWidth(), getScreenHeight() );
         if ( fade > 0 ) {
             fillRectangle( 0, 0, getScreenWidth(), getScreenHeight(), new java.awt.Color( 5, 6, 18, (int) ( 255 * fade ) ) );
         }

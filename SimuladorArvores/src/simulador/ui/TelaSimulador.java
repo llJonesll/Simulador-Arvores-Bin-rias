@@ -114,7 +114,7 @@ public class TelaSimulador implements Tela {
         }
         
         painel.atualizar( m, largura - painelW - mg, areaY, painelW, areaH, rep, livre );
-        executar( controles.atualizar( m, delta, mg, dockY, largura - 2 * mg, livre, rep, dica ) );
+        executar( controles.atualizar( m, delta, mg, dockY, largura - 3 * mg - BotaoAjuda.TAMANHO, livre, rep, dica ) );
         
         rep.atualizar( delta );
         viz.atualizar( delta, areaX, areaY, areaW, areaH );
