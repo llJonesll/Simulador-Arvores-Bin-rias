@@ -67,9 +67,3 @@ grava um `Passo` (foto completa + explicação). O `Visualizador` compara fotos
 consecutivas pelo `id` dos nós e anima a diferença: nós deslizam nas rotações,
 mudam de cor na recoloração, nascem do pai na inserção e somem na remoção.
 Como o modelo não depende da engine, ele pode ser testado sozinho.
-
-## Observações
-
-* Apague os antigos `src/simulador/ABB.java` e `src/simulador/No.java`; as
-  versões novas estão em `simulador/modelo`.
-* O limite é de 63 nós, para o desenho continuar legível.
