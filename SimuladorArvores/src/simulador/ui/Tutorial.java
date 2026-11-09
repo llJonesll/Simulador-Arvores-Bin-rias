@@ -134,6 +134,21 @@ public class Tutorial {
         p.ilustracao.desenhar( e, px + pw / 2, iy + ih / 2, tempo );
         
         double y = iy + ih + 30;
+        
+        // Injeção dos Créditos
+        if ( pagina == 0 ) {
+            String[] creditos = {
+                "Desenvolvedores: João Carlos Silveira e José Pedro Franco",
+                "Engine Base: JSGE (Prof. David Buzatto)",
+                "IA Auxiliar: Claude e Gemini"
+            };
+            for ( String c : creditos ) {
+                Desenho.texto( e, c, px + 40, y, 14, COR, true );
+                y += 20;
+            }
+            y += 10;
+        }
+        
         for ( String t : p.topicos ) {
             e.fillCircle( px + 40, y, 4, COR );
             y = Desenho.paragrafo( e, t, px + 56, y, pw - 112, 15, 21, 3, Tema.TEXTO ) + 9;

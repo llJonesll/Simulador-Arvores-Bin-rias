@@ -13,11 +13,8 @@ import simulador.modelo.NoVisual.Destaque;
 import simulador.modelo.Passo;
 
 /**
- * Desenha a árvore de um {@link Passo} e anima a transição para o próximo:
- * nós deslizam para a nova posição (rotações), mudam de cor (recoloração),
- * nascem do pai (inserção) e desaparecem (remoção).
- * 
- * O layout é o clássico: x = ranque em ordem, y = nível.
+ * Desenha a árvore de um {@link Passo} e anima a transição para o próximo.
+ * Atualizado para exibir conexões vermelhas de forma horizontal (estilo LLRB / 2-3).
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -50,7 +47,6 @@ public class Visualizador {
         return passo;
     }
     
-    /** Passa a exibir o passo; as diferenças em relação ao anterior viram animação. */
     public void mostrar( Passo novo ) {
         
         Map<Integer, NoVisual> antes = new HashMap<>();
@@ -150,7 +146,6 @@ public class Visualizador {
         a.esc = 0;
         a.alfa = 0;
         
-        // nós ligados à árvore nascem de dentro do pai
         if ( a.v != null && !a.v.flutuante && a.v.paiId >= 0 ) {
             Anim pai = nos.get( a.v.paiId );
             if ( pai != null && !pai.novo ) {
@@ -162,6 +157,18 @@ public class Visualizador {
         a.fill = rgb( corFundo( a.v ) );
         a.anel = rgb( corAnel( a.v ) );
         
+    }
+
+    // Calcula a Profundidade Negra para achatar os nós vermelhos na visualização 2-3
+    private int getNivelNegro( NoVisual v, Map<Integer, NoVisual> mapaNos, Map<Integer, Integer> cache ) {
+        if ( v.paiId < 0 ) return 0;
+        if ( cache.containsKey( v.id ) ) return cache.get( v.id );
+        
+        NoVisual pai = mapaNos.get( v.paiId );
+        int nnPai = pai != null ? getNivelNegro( pai, mapaNos, cache ) : 0;
+        int nn = nnPai + ( v.cor == NoVisual.Cor.VERMELHO ? 0 : 1 ); // Não desce o Y se for vermelho
+        cache.put( v.id, nn );
+        return nn;
     }
     
     private void calcularAlvos( double ax, double ay, double aw, double ah ) {
@@ -179,12 +186,21 @@ public class Visualizador {
         double largArvore = ( n - 1 ) * dx;
         double x0 = ax + aw / 2 - largArvore / 2;
         double y0 = ay + topo;
+
+        Map<Integer, NoVisual> mapaNos = new HashMap<>();
+        for ( NoVisual v : passo.nos ) {
+            mapaNos.put( v.id, v );
+        }
+        Map<Integer, Integer> nivelNegro = new HashMap<>();
         
         for ( NoVisual v : passo.nos ) {
             if ( !v.flutuante ) {
                 Anim a = nos.get( v.id );
                 a.tx = x0 + v.ranque * dx;
-                a.ty = y0 + v.nivel * dy;
+                
+                // Utiliza nível negro para nivelar 2-3 na LLRB (em ABB/AVL ele agirá como profundidade normal)
+                int nn = getNivelNegro( v, mapaNos, nivelNegro );
+                a.ty = y0 + nn * dy;
             }
         }
         
@@ -209,22 +225,21 @@ public class Visualizador {
     //**************************************************************************
     
     private Color corFundo( NoVisual v ) {
-        switch ( v.cor ) {
-            case VERMELHO: return Tema.NO_VERMELHO;
-            case PRETO: return Tema.NO_PRETO;
-            default: return Tema.misturar( Tema.NO_BASE, acento, 0.38 );
+        // Para simular a 2-3 visualmente, todos os nós base da LLRB (Vermelho e Preto) ficam com fundo neutro escuro.
+        if ( v.cor == NoVisual.Cor.VERMELHO || v.cor == NoVisual.Cor.PRETO ) {
+            return Tema.NO_PRETO;
         }
+        return Tema.misturar( Tema.NO_BASE, acento, 0.38 );
     }
     
     private Color corAnel( NoVisual v ) {
         if ( v.destaque != Destaque.NENHUM ) {
             return Tema.destaque( v.destaque );
         }
-        switch ( v.cor ) {
-            case VERMELHO: return Tema.NO_VERMELHO_ANEL;
-            case PRETO: return Tema.NO_PRETO_ANEL;
-            default: return Tema.misturar( acento, Color.WHITE, 0.35 );
+        if ( v.cor == NoVisual.Cor.VERMELHO || v.cor == NoVisual.Cor.PRETO ) {
+            return Tema.NO_PRETO_ANEL;
         }
+        return Tema.misturar( acento, Color.WHITE, 0.35 );
     }
     
     private double brilhoAlvo( NoVisual v ) {
@@ -298,7 +313,12 @@ public class Visualizador {
             }
             
             double a = Math.min( filho.alfa, pai.alfa );
-            if ( v.arestaDestacada ) {
+            
+            // Foca a cor vermelha na LINHA, desenhando mais grossa e colorida
+            if ( v.cor == NoVisual.Cor.VERMELHO ) {
+                e.setStrokeLineWidth( 5.0f );
+                e.drawLine( pai.x, pai.y, filho.x, filho.y, Tema.alfa( Tema.NO_VERMELHO, a ) );
+            } else if ( v.arestaDestacada ) {
                 e.setStrokeLineWidth( 4.5f );
                 e.drawLine( pai.x, pai.y, filho.x, filho.y, Tema.alfa( Tema.AMBAR, a ) );
             } else {

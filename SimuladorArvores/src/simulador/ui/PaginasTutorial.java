@@ -9,7 +9,8 @@ import simulador.modelo.TipoArvore;
 /**
  * Conteúdo do tutorial: as páginas e suas ilustrações.
  * 
- * @author Prof. Dr. David Buzatto
+ * 
+ * @author Prof. Dr. David Buzatto (modificado por João Carlos Silveira e José Pedro)
  */
 public final class PaginasTutorial {
     
@@ -19,9 +20,9 @@ public final class PaginasTutorial {
     public static List<PaginaTutorial> todas() {
         return List.of( 
             new PaginaTutorial( "Bem-vindo ao Simulador de Árvores", PaginasTutorial::boasVindas, 
-                "Veja, passo a passo, como funcionam três árvores de busca: ABB, AVL e Vermelho-Preto.", 
-                "Cada operação é executada de verdade e dividida em passos animados e explicados.", 
-                "No menu, escolha uma árvore com o mouse, com as setas + Enter ou com as teclas 1, 2 e 3." ),
+                "Veja, passo a passo, como funcionam as árvores: ABB, AVL e LLRB (Visão 2-3).", 
+                "Créditos: João Carlos e José Pedro. Engine: JSGE (Prof. David Buzatto).",
+                "No menu, escolha uma árvore com o mouse, setas + Enter ou teclas 1, 2 e 3." ),
             new PaginaTutorial( "Inserir, buscar e remover", PaginasTutorial::operacoes, 
                 "Digite uma chave de 0 a 999 no campo e tecle Enter para inserir.", 
                 "Com a chave digitada, use Buscar (B) ou Remover (Del). Aleatório (A) insere uma chave sorteada.", 
@@ -33,15 +34,15 @@ public final class PaginasTutorial {
             new PaginaTutorial( "Entenda o desenho", PaginasTutorial::legenda, 
                 "O brilho indica o papel do nó no passo. As etiquetas (z, pai, tio, irmão...) mostram quem é quem.", 
                 "AVL: o selo abaixo do nó mostra a altura (h) e o fator de balanceamento (fb); fora de -1 a +1 fica vermelho.", 
-                "Vermelho-Preto: as cores são as da regra. O nó com anel duplo é o \"duplo-preto\" da remoção." ),
+                "LLRB (2-3): as conexões vermelhas horizontais representam nós unidos (3-nós) inclinados à esquerda." ),
             new PaginaTutorial( "Templates: casos prontos", PaginasTutorial::templates, 
-                "Templates (T) abre cenários para estudar: rotações da AVL, casos da Vermelho-Preto e remoções da ABB.", 
+                "Templates (T) abre cenários para estudar: rotações da AVL, regras LLRB e remoções da ABB.", 
                 "Escolha com o clique ou com as teclas 1 a 8. A árvore é montada e a chave já vem preenchida.", 
                 "O botão da operação sugerida pulsa: clique nele (ou tecle Enter) para ver o caso acontecer." ),
             new PaginaTutorial( "Percursos e atalhos", PaginasTutorial::atalhos, 
                 "Em ordem, Pré, Pós e Largura mostram a ordem de visita dos nós e a saída acumulada.", 
                 "Esc volta ao menu. F1 (ou H) abre este tutorial a qualquer momento.", 
-                "Dica: tente inserir chaves em ordem crescente na ABB e depois na AVL e compare as alturas." )
+                "Dica: tente inserir chaves em ordem crescente na ABB e depois na LLRB e compare as alturas." )
         );
     }
     
@@ -109,7 +110,6 @@ public final class PaginasTutorial {
             x += larg[i] + gap[i];
         }
         
-        // linha do tempo de exemplo
         Tom[] tons = { Tom.INFO, Tom.INFO, Tom.INFO, Tom.SUCESSO, Tom.INFO, Tom.ALERTA, Tom.INFO, Tom.INFO, Tom.SUCESSO };
         double w = 340;
         double ty = cy + 40;
@@ -145,10 +145,9 @@ public final class PaginasTutorial {
         no( e, x0 + dx * 2, y, "20", base, Tema.CIANO, p, "Novo" );
         no( e, x0 + dx * 3, y, "50", base, Tema.ROXO, p, "Pivô" );
         no( e, x0 + dx * 4, y, "70", base, Tema.ALERTA, p, "Problema" );
-        no( e, x0 + dx * 5, y, "35", Tema.NO_VERMELHO, Tema.NO_VERMELHO_ANEL, 0, "Vermelho" );
+        no( e, x0 + dx * 5, y, "35", Tema.NO_VERMELHO, Tema.NO_VERMELHO_ANEL, 0, "Link Verm." );
         no( e, x0 + dx * 6, y, "60", Tema.NO_PRETO, Tema.NO_PRETO_ANEL, 0, "Preto" );
         
-        // selo da AVL no nó "70"
         double sx = x0 + dx * 4;
         e.fillRoundRectangle( sx - 36, y + 24, 72, 18, 12, new Color( 0x10132E ) );
         Desenho.textoCentro( e, "h3  fb +2", sx, y + 33, 11, Tema.ALERTA, true );

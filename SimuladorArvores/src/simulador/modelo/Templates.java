@@ -100,37 +100,29 @@ public class Templates {
         
         List<Template> l = new ArrayList<>();
         
-        l.add( new Template( "Inserção: tio vermelho", 
-                "Inserir 20 cria dois vermelhos seguidos (30 e 20) e o tio 70 é vermelho. Solução: só recolorir, sem rotações.", 
-                new int[] { 50, 30, 70 }, Operacao.INSERIR, 20, "Insira o 20 e veja a recoloração." ) );
+        l.add( new Template( "LLRB Regra 1: Rotação à Esquerda", 
+                "Na LLRB, não é permitido ter uma ligação vermelha pendendo para a direita. Inserir um valor maior cria esse filho direito vermelho, forçando uma rotação à esquerda.", 
+                new int[] { 10 }, Operacao.INSERIR, 20, "Insira o 20 e observe a rotação à esquerda corrigir a inclinação." ) );
         
-        l.add( new Template( "Inserção: tio preto (linha)", 
-                "Inserir 20 cria dois vermelhos seguidos, mas o tio é preto (null). Como 20, 30 e 50 estão em linha, basta uma rotação simples com recoloração.", 
-                new int[] { 50, 30 }, Operacao.INSERIR, 20, "Insira o 20 e veja a rotação à direita." ) );
+        l.add( new Template( "LLRB Regra 2: Rotação à Direita", 
+                "Não é permitido ter dois nós vermelhos seguidos à esquerda. Inserir valores em ordem decrescente gera essa violação, forçando uma rotação à direita no pai.", 
+                new int[] { 30, 20 }, Operacao.INSERIR, 10, "Insira o 10 e observe a rotação à direita resolver os vermelhos consecutivos." ) );
         
-        l.add( new Template( "Inserção: tio preto (joelho)", 
-                "Inserir 40 cria dois vermelhos seguidos, o tio é preto e os três nós formam um \"joelho\". Solução: duas rotações.", 
-                new int[] { 50, 30 }, Operacao.INSERIR, 40, "Insira o 40 e veja a rotação dupla." ) );
+        l.add( new Template( "LLRB Regra 3: Inversão de Cores (Flip)", 
+                "Quando um nó fica com ambos os filhos vermelhos, ele simula um nó estourado. A solução é inverter as cores: os filhos viram pretos e o pai vira vermelho.", 
+                new int[] { 20, 10 }, Operacao.INSERIR, 30, "Insira o 30 e observe o Flip Colors (Inversão de Cores)." ) );
         
-        l.add( new Template( "Remover nó vermelho", 
-                "Remover nó vermelho nunca quebra as regras: nenhum caminho perde nós pretos.", 
-                new int[] { 50, 30, 70 }, Operacao.REMOVER, 30, "Remova o 30." ) );
+        l.add( new Template( "Efeito Cascata (Inserção Crescente)", 
+                "Ao contrário da ABB que vira uma lista, inserir elementos em ordem crescente na LLRB engatilha rotações e inversões de cor contínuas, mantendo a árvore balanceada.", 
+                new int[] { 10, 20, 30, 40, 50, 60 }, Operacao.INSERIR, 70, "Insira o 70 e veja as regras da LLRB se aplicando em cascata até a raiz." ) );
         
-        l.add( new Template( "Remoção: sobrinho de fora", 
-                "Remover o 20 (preto) deixa um \"preto extra\". O irmão 90 é preto e seu filho de fora, 120, é vermelho: uma rotação resolve tudo (caso 4).", 
-                new int[] { 30, 20, 90, 120 }, Operacao.REMOVER, 20, "Remova o 20 e acompanhe o duplo-preto." ) );
+        l.add( new Template( "Remoção: Nó vermelho (Folha)", 
+                "Remover um nó vermelho é a operação mais simples, pois não altera a altura negra (número de nós pretos) de nenhum caminho da árvore.", 
+                new int[] { 50, 25, 75, 10, 30 }, Operacao.REMOVER, 30, "Remova o 30 (que é vermelho) sem violar regras." ) );
         
-        l.add( new Template( "Remoção: sobrinho de dentro", 
-                "Remover o 50 (preto) deixa um \"preto extra\". O sobrinho vermelho está do lado de dentro: primeiro uma rotação no irmão (caso 3), depois outra no pai (caso 4).", 
-                new int[] { 50, 100, 60, 90 }, Operacao.REMOVER, 50, "Remova o 50 e veja as duas rotações." ) );
-        
-        l.add( new Template( "Remoção: irmão vermelho", 
-                "Ao remover 150, o irmão 40 é vermelho (caso 1). Uma rotação o troca por um irmão preto e cai em outro caso.", 
-                new int[] { 50, 150, 80, 40, 10, 30 }, Operacao.REMOVER, 150, "Remova o 150 e siga os casos em cadeia." ) );
-        
-        l.add( new Template( "Remoção: sem sobrinhos", 
-                "Remover 110 (preto): o irmão e os sobrinhos são pretos, então o irmão fica vermelho e o \"preto extra\" sobe para o pai (caso 2).", 
-                new int[] { 110, 150, 130, 100, 90, 50, 30, 70 }, Operacao.REMOVER, 110, "Remova o 110 e veja o preto extra subir." ) );
+        l.add( new Template( "Remoção: Reequilíbrio e Inclinação", 
+                "Ao remover um nó, a exclusão clássica pode deixar ligações vermelhas pendendo para a direita. A LLRB sobe pela árvore aplicando as 3 regras para restaurar a inclinação à esquerda.", 
+                new int[] { 50, 20, 70, 10, 30, 60, 80 }, Operacao.REMOVER, 10, "Remova o 10 e acompanhe as correções subindo até a raiz." ) );
         
         return l;
         
